@@ -1,7 +1,7 @@
 import { HeaderSearch } from "@/components/search/header";
 import { Container } from "./ui/Container";
 
-const pageSearch = () => {
+const pageSearchAll = async () => {
   return (
     <div className="flex flex-col p-2">
       <HeaderSearch />
@@ -10,4 +10,4 @@ const pageSearch = () => {
   );
 };
 
-export default pageSearch;
+export default pageSearchAll;

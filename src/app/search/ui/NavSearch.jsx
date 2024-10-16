@@ -1,16 +1,16 @@
 "use client";
 import { userStore } from "@/store/userStore";
+import Link from "next/link";
 import React from "react";
 
 export const NavSearch = () => {
   const user = userStore((state) => state.user);
-  console.log(user, "🚩");
   return (
     <div className="navbar bg-base-100 sticky top-0">
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl">
+        <Link href="/" className="btn btn-ghost text-xl">
           {user.user_name} - {user.cod_establ}
-        </a>
+        </Link>
       </div>
       <div className="flex-none">
         <div className="dropdown dropdown-end">

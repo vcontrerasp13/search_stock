@@ -17,7 +17,7 @@ const InputSearch = ({ setItemCode, itemCode, handleSearch }) => {
         className="input input-bordered join-item w-full"
         placeholder="Ingresar Cod..."
         value={itemCode}
-        onChange={(e) => setItemCode(e.target.value)}
+        onChange={(e) => setItemCode(e.target.value.trim())}
         autoFocus
         ref={emailInput}
       />

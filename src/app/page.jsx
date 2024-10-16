@@ -5,7 +5,7 @@ import { NavSearch } from "./search/ui/NavSearch";
 export default function Home() {
   return (
     <div className="min-h-screen">
-      <NavSearch />
+      {/* <NavSearch /> */}
       <div className="flex gap-5 p-2 flex-col justify-center items-center ">
         {/* <h2 className="text-3xl">Bienvenido Administrador</h2> */}
 

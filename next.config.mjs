@@ -5,7 +5,7 @@ const nextConfig = {
         return [
             {
                 source: '/api/:path*',
-                destination: 'http://192.168.0.244:8060/api/:path*', // Reemplaza con la URL de tu API
+                destination: 'http://192.168.0.244:8060/api/:path*', 
             },
         ];
     },

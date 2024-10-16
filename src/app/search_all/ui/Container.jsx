@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import InputSearch from "./inputSearch";
-import { ResultContainer } from "@/components/search/gridResult";
+import { ResultContainer } from "@/components/search/resultContainer";
 import { Loader } from "@/components/ui/Loader";
 
 export const Container = () => {
@@ -59,7 +59,10 @@ export const Container = () => {
         (isLoading ? (
           <Loader />
         ) : (
-          <ResultContainer product={product} message={message} />
+          <ResultContainer
+            product={product}
+            message={message}
+          />
         ))}
     </div>
   );

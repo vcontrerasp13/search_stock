@@ -1,10 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import InputSearch from "./inputSearch";
-import { ResultContainer } from "@/components/search/gridResult";
+import { ResultContainer } from "@/components/search/resultContainer";
 import { Loader } from "@/components/ui/Loader";
 import { userStore } from "@/store/userStore";
 import { toast } from "sonner";
+import { establecimientoStore } from "@/store/establecimientoStore";
 
 export const Container = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +15,13 @@ export const Container = () => {
   const [message, setMessage] = useState("");
   const user = userStore((state) => state.user);
 
-  console.log(user);
+  const setEstablecimientos = establecimientoStore(
+    (state) => state.setEstablecimientos
+  );
+
+  useEffect(() => {
+    setEstablecimientos();
+  }, []);
 
   const getProduct = async () => {
     setIsLoading(true);
@@ -26,12 +33,12 @@ export const Container = () => {
       const response = await fetch(url);
 
       if (response.status === 400) {
-        const errorData = await response.json(); // Extrae los detalles del error
-        setMessage(errorData.message || "Error desconocido"); // Muestra el mensaje de error si existe
-        setProduct([]); // Vacía los productos
+        const errorData = await response.json();
+        setMessage(errorData.message || "Error desconocido");
+        setProduct([]);
       } else {
-        const data = await response.json(); // Extrae los datos si la respuesta es exitosa
-        setProduct(data); // Establece los productos con los datos recibidos
+        const data = await response.json();
+        setProduct(data);
       }
     } catch (error) {
       console.log(error);
@@ -65,7 +72,11 @@ export const Container = () => {
         (isLoading ? (
           <Loader />
         ) : (
-          <ResultContainer product={product} message={message} />
+          <ResultContainer
+            product={product}
+            message={message}
+            itemCode={itemCode}
+          />
         ))}
     </div>
   );

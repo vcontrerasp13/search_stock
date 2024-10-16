@@ -15,7 +15,7 @@ const InputSearch = ({ setItemCode, itemCode, handleSearch }) => {
         className="text-xl h-10 w-full border rounded-md p-1 "
         placeholder="Ingresar Cod..."
         value={itemCode}
-        onChange={(e) => setItemCode(e.target.value)}
+        onChange={(e) => setItemCode(e.target.value.trim())}
       />
       <button
         onClick={handleSearch}

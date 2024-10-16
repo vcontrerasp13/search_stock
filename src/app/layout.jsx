@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { NavSearch } from "./search/ui/NavSearch";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         data-theme="light"
       >
+        <NavSearch />
         {children}
         <Toaster richColors />
       </body>
