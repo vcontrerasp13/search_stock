@@ -1,12 +1,14 @@
 "use client";
-import React, { useState } from "react";
-// import { getProduct } from "@/api/product";
-import { productStore } from "@/store/productStore";
+import React, { useEffect, useRef } from "react";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 
 const InputSearch = ({ setItemCode, itemCode, handleSearch }) => {
-  const setProduct = productStore((state) => state.setProduct);
-  const product = productStore((state) => state.product);
+  const emailInput = useRef(null);
+  useEffect(() => {
+    if (emailInput.current) {
+      emailInput.current.focus();
+    }
+  }, []);
 
   return (
     <div className="flex items-center w-full join ">
@@ -16,6 +18,8 @@ const InputSearch = ({ setItemCode, itemCode, handleSearch }) => {
         placeholder="Ingresar Cod..."
         value={itemCode}
         onChange={(e) => setItemCode(e.target.value)}
+        autoFocus
+        ref={emailInput}
       />
       <button
         onClick={handleSearch}
