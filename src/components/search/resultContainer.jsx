@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import { productStore } from "@/store/productStore";
 import { userStore } from "@/store/userStore";
 import { ordernarEstablecimientosDistancia } from "../../../utils/helper";
+import box_empty from "/public/images/image1.svg"
+import Image from "next/image";
+import { Pagination } from "../ui/Pagination";
 
 export const ResultContainer = ({ product, message, itemCode = "" }) => {
   const establecimientos = establecimientoStore(
@@ -25,7 +28,7 @@ export const ResultContainer = ({ product, message, itemCode = "" }) => {
 
   // console.log(productsAll);
 
-  const origen = establecimientos.find((e) => e.id == userdata.cod_establ);
+  const origen = establecimientos.find((e) => e.id == userdata.cod_establec);
   // const origen = establecimientos.find((e) => e.id == "ALM109");
   const establec_ordenados = ordernarEstablecimientosDistancia(
     establecimientos,
@@ -36,28 +39,31 @@ export const ResultContainer = ({ product, message, itemCode = "" }) => {
 
   return (
     <div className="grid grid-cols-2 gap-2">
-      {product.length > 0 ? (
-        product.map((e, i) => <Card key={i} data={e} />)
-      ) : (
-        <div className="col-span-2 ">
-          <span className=" text-slate-300">{message}</span>
-          <h2 className="text-2xl text-slate-500">
-            Lista de establecimientos con Stock
-          </h2>
-          <hr />
+      {product.length > 0
+        ? (product.map((e, i) => <Card key={i} data={e} />))
+        : (
+          <div className="col-span-2 items-center ">
+            <p className=" text-center  text-orange-400 ">{message}</p>
+            <Image
+              src={box_empty}
+              width={500}
+              height={500}
+              alt="imag-search"
+              className=" h-62 mt-10 m-auto pointer-events-none opacity-30"
+            />
+            <h2 className="text-2xl text-slate-500 mt-5">
+              Lista de establecimientos con Stock
+            </h2>
+            <hr />
 
-          {/* Mostrar lista de almacenes con stock */}
-          <div className="flex flex-col gap-2 mt-5">
-            {establec_ordenados.map((establecimiento, index) => (
-              <EstablecimientoItem
-                name={establecimiento.nombre}
-                // stock={establecimiento.onHand}
-                key={index}
-              />
-            ))}
+            {/* Mostrar lista de almacenes con stock */}
+            <div className="flex flex-col gap-2 mt-5">
+              {establec_ordenados.map((establecimiento, index) => (
+                <EstablecimientoItem name={establecimiento.nombre} key={index} />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 };

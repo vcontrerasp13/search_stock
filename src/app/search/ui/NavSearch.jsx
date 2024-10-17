@@ -5,11 +5,12 @@ import React from "react";
 
 export const NavSearch = () => {
   const user = userStore((state) => state.user);
+  console.log(user);
   return (
-    <div className="navbar bg-base-100 sticky top-0">
+    <div className="navbar bg-base-100 sticky top-0 z-50">
       <div className="flex-1">
         <Link href="/" className="btn btn-ghost text-xl">
-          {user.user_name} - {user.cod_establ}
+          {user.user_name} - {user.cod_establec}
         </Link>
       </div>
       <div className="flex-none">

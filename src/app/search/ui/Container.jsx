@@ -6,6 +6,9 @@ import { Loader } from "@/components/ui/Loader";
 import { userStore } from "@/store/userStore";
 import { toast } from "sonner";
 import { establecimientoStore } from "@/store/establecimientoStore";
+import Image from "next/image";
+import search_img from "/public/images/image2.svg";
+import { Pagination } from "@/components/ui/Pagination";
 
 export const Container = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,6 +17,12 @@ export const Container = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [message, setMessage] = useState("");
   const user = userStore((state) => state.user);
+
+
+  // Estado para paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Cambia esto según cuántos productos quieras mostrar por página
+
 
   const setEstablecimientos = establecimientoStore(
     (state) => state.setEstablecimientos
@@ -25,9 +34,8 @@ export const Container = () => {
 
   const getProduct = async () => {
     setIsLoading(true);
-    let url = `/api/Articulo/ConsultarStock?ItemCode=${itemCode.toUpperCase()}&WshCode=${
-      user.cod_establ
-    }`;
+    let url = `/api/Articulo/ConsultarStock?ItemCode=${itemCode.toUpperCase()}&WshCode=${user.cod_establec
+      }`;
 
     try {
       const response = await fetch(url);
@@ -53,12 +61,22 @@ export const Container = () => {
       return;
     }
     await getProduct();
-
+    setCurrentPage(1); // Resetear a la primera página al buscar
     setHasSearched(true);
   };
 
+  // Calcular productos a mostrar en función de la página actual
+  const indexOfLastProduct = currentPage * itemsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
+  const currentProducts = product.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  // Cambiar página
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
-    <div className=" ">
+    <div className="flex flex-col items-center gap-2 ">
       {/* Input Search */}
 
       <InputSearch
@@ -68,16 +86,37 @@ export const Container = () => {
       />
       {/* container Result */}
 
-      {hasSearched &&
-        (isLoading ? (
-          <Loader />
+      <div className="w-full  min-h-80">
+        {hasSearched ? (
+          isLoading ? (
+            <Loader />
+          ) : (
+            <ResultContainer
+              product={currentProducts}
+              message={message}
+              itemCode={itemCode}
+            />
+          )
         ) : (
-          <ResultContainer
-            product={product}
-            message={message}
-            itemCode={itemCode}
+          <Image
+            src={search_img}
+            width={500}
+            height={500}
+            alt="imag-search"
+            className=" h-62 mt-10 m-auto pointer-events-none opacity-30"
           />
-        ))}
+        )}
+      </div>
+
+      {/* Pagination */}
+      {product.length > itemsPerPage && (
+        <Pagination
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          totalItems={product.length}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };

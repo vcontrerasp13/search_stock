@@ -23,7 +23,7 @@ const InputSearch = ({ setItemCode, itemCode, handleSearch }) => {
       />
       <button
         onClick={handleSearch}
-        className="btn join-item btn-success text-white rounded-r-lg"
+        className="btn join-item btn-primary text-white rounded-r-lg"
       >
         <HiMagnifyingGlass width={50} className="text-3xl" />
       </button>
