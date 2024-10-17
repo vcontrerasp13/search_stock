@@ -11,22 +11,22 @@ const Card = ({ data }) => {
   // if (!nom_establ) return null;
 
   return (
-    <div className="flex flex-col p-2">
-      <div className="border p-2 rounded-md">
-        <h3 className="font-bold">
-          Estab.:
-          <span className="font-light">
-            {nom_establ ? nom_establ.nombre : "Establecimiento no encontrado"}
-          </span>
-        </h3>
-        <p className="font-bold">
-          cod: <span className="font-light">{data.itemCode}</span>
-        </p>
-        <p className="font-bold">
-          Cantidad: <span className="font-light">{data.onHand}</span>
-        </p>
-      </div>
+    // <div className="flex flex-col p-2 w-full">
+    <div className="border p-2 rounded-md ">
+      <h3 className="font-bold  truncate">
+        Estab.:
+        <span className="font-light ">
+          {nom_establ ? nom_establ.nombre : "Establecimiento no encontrado"}
+        </span>
+      </h3>
+      <p className="font-bold">
+        cod: <span className="font-light">{data.itemCode}</span>
+      </p>
+      <p className="font-bold">
+        Cantidad: <span className="font-light">{data.onHand}</span>
+      </p>
     </div>
+    // </div>
   );
 };
 

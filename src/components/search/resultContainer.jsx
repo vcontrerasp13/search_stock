@@ -17,21 +17,38 @@ export const ResultContainer = ({ product, message, itemCode = "" }) => {
   console.log(product.length); //0
 
   const setProduct = productStore((state) => state.setProduct);
-  const dataWithStock = productStore((state) => state.product);
+  const productos = productStore((state) => state.product);
 
   useEffect(() => {
     setProduct(itemCode);
-  }, []);
+  }, [itemCode]);
 
 
-  const origen = establecimientos.find((e) => e.id == userdata.cod_establec);
+  const productosConEstablecimiento = productos
+    .filter((producto) => establecimientos.some((e) => e.id === producto.codBode)) // Filtrar los productos con establecimiento válido
+    .map((producto) => {
+      const establecimiento = establecimientos.find((e) => e.id === producto.codBode);
+      return {
+        itemCode: producto.itemCode,
+        cantidad: producto.onHand,
+        id: establecimiento.id,
+        nombre: establecimiento.nombre,
+        lat: establecimiento.lat,
+        lon: establecimiento.lon
+      };
+    });
+
+    console.log(productosConEstablecimiento);
+
+  const origen = establecimientos.find((e) => e.id === userdata.cod_establec);
+  console.log(origen);
   // const origen = establecimientos.find((e) => e.id == "ALM109");
-  const establec_ordenados = ordernarEstablecimientosDistancia(establecimientos, origen);
+  const establec_ordenados = ordernarEstablecimientosDistancia(productosConEstablecimiento, origen);
 
 
 
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
       {product.length > 0
         ? (product.map((e, i) => <Card key={i} data={e} />))
         : (
