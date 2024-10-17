@@ -1,32 +1,30 @@
-// Pagination.js
 export const Pagination = ({ currentPage, itemsPerPage, totalItems, onPageChange }) => {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
-    
+  
     // Crear un rango de páginas para mostrar
     const range = (start, end) => {
       return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     };
   
     const getPageNumbers = () => {
-      if (totalPages <= 5) {
-        return range(1, totalPages); // Si hay 5 o menos páginas, mostrar todas
-      }
-  
       const pages = [];
-      if (currentPage > 2) {
-        pages.push(1);
-        if (currentPage > 3) pages.push('...'); // Agregar '...' si hay más de 3 páginas
+  
+      // Si el total de páginas es menor a 7, mostrar todas las páginas
+      if (totalPages < 7) {
+        return range(1, totalPages);
       }
   
-      const start = Math.max(2, currentPage - 1);
-      const end = Math.min(totalPages - 1, currentPage + 1);
-      for (let i = start; i <= end; i++) {
-        pages.push(i);
+      // Si la página actual está en el inicio
+      if (currentPage < 4) {
+        pages.push(...range(1, 3), '...', totalPages);
       }
-  
-      if (currentPage < totalPages - 1) {
-        if (currentPage < totalPages - 2) pages.push('...'); // Agregar '...' si hay más de 3 páginas
-        pages.push(totalPages);
+      // Si la página actual está en el final
+      else if (currentPage > totalPages - 3) {
+        pages.push(1, '...', ...range(totalPages - 2, totalPages));
+      }
+      // Si la página actual está en el medio
+      else {
+        pages.push(1, '...', ...range(currentPage - 1, currentPage + 1), '...', totalPages);
       }
   
       return pages;
@@ -61,3 +59,6 @@ export const Pagination = ({ currentPage, itemsPerPage, totalItems, onPageChange
       </div>
     );
   };
+  
+//   export default Pagination;
+  

@@ -21,7 +21,7 @@ export const Container = () => {
 
   // Estado para paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Cambia esto según cuántos productos quieras mostrar por página
+  const itemsPerPage = 10; 
 
 
   const setEstablecimientos = establecimientoStore(
@@ -32,6 +32,7 @@ export const Container = () => {
     setEstablecimientos();
   }, []);
 
+  // obtner Productos
   const getProduct = async () => {
     setIsLoading(true);
     let url = `/api/Articulo/ConsultarStock?ItemCode=${itemCode.toUpperCase()}&WshCode=${user.cod_establec
@@ -61,7 +62,7 @@ export const Container = () => {
       return;
     }
     await getProduct();
-    setCurrentPage(1); // Resetear a la primera página al buscar
+    setCurrentPage(1); 
     setHasSearched(true);
   };
 
@@ -78,12 +79,12 @@ export const Container = () => {
   return (
     <div className="flex flex-col items-center gap-2 ">
       {/* Input Search */}
-
       <InputSearch
         setItemCode={setItemCode}
         itemCode={itemCode}
         handleSearch={handleSearch}
       />
+
       {/* container Result */}
 
       <div className="w-full  min-h-80">
