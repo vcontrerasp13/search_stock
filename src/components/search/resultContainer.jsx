@@ -9,46 +9,63 @@ import { productStore } from "@/store/productStore";
 import { userStore } from "@/store/userStore";
 import { ordernarEstablecimientosDistancia } from "../../../utils/helper";
 import box_empty from "/public/images/image1.svg"
+import { Loader } from "../ui/Loader";
 
 export const ResultContainer = ({ product, message, itemCode = "" }) => {
   const establecimientos = establecimientoStore((state) => state.establecimientos);
   const userdata = userStore((state) => state.user);
+  const [loading, setLoading] = useState(true);
 
   console.log(product.length); //0
 
   const setProduct = productStore((state) => state.setProduct);
-  const productos = productStore((state) => state.product);
+  const productos = productStore((state) => state.product || []);
 
   useEffect(() => {
     setProduct(itemCode);
-  }, [itemCode]);
+  }, []);
+
+  useEffect(() => {
+    // Actualizar el estado de carga una vez que se procesen los productos
+    if (productos.length > 0 && establecimientos.length > 0) {
+      setLoading(false);
+    }
+  }, [productos, establecimientos]);
+
+  console.log(productos, '🚩🚩')
+
+  if (productos.length > 0) {
+
+    const productosConEstablecimiento = productos
+      .filter((producto) => establecimientos.some((e) => e.id === producto.codBode)) // Filtrar los productos con establecimiento válido
+      .map((producto) => {
+        const establecimiento = establecimientos.find((e) => e.id === producto.codBode);
+        return {
+          itemCode: producto.itemCode,
+          cantidad: producto.onHand,
+          id: establecimiento.id,
+          nombre: establecimiento.nombre,
+          lat: establecimiento.lat,
+          lon: establecimiento.lon
+        };
+      });
+
+    // console.log(productosConEstablecimiento);
 
 
-  const productosConEstablecimiento = productos
-    .filter((producto) => establecimientos.some((e) => e.id === producto.codBode)) // Filtrar los productos con establecimiento válido
-    .map((producto) => {
-      const establecimiento = establecimientos.find((e) => e.id === producto.codBode);
-      return {
-        itemCode: producto.itemCode,
-        cantidad: producto.onHand,
-        id: establecimiento.id,
-        nombre: establecimiento.nombre,
-        lat: establecimiento.lat,
-        lon: establecimiento.lon
-      };
-    });
+    const origen = establecimientos.find((e) => e.id === userdata.cod_establec);
+    // const origen = establecimientos.find((e) => e.id == "ALM109");
+    const establec_ordenados = ordernarEstablecimientosDistancia(productosConEstablecimiento, origen);
 
-    console.log(productosConEstablecimiento);
-
-  const origen = establecimientos.find((e) => e.id === userdata.cod_establec);
-  console.log(origen);
-  // const origen = establecimientos.find((e) => e.id == "ALM109");
-  const establec_ordenados = ordernarEstablecimientosDistancia(productosConEstablecimiento, origen);
+  } else {
+    setLoading(true)
+    return <span>Producto No encontrado en Ningún establecimiento</span>;
+  }
 
 
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
       {product.length > 0
         ? (product.map((e, i) => <Card key={i} data={e} />))
         : (
@@ -68,9 +85,10 @@ export const ResultContainer = ({ product, message, itemCode = "" }) => {
 
             {/* Mostrar lista de almacenes con stock */}
             <div className="flex flex-col gap-2 mt-5">
-              {establec_ordenados.map((establecimiento, index) => (
-                <EstablecimientoItem e={establecimiento} key={index} />
-              ))}
+              {loading ? <Loader />
+                : establec_ordenados.map((establecimiento, index) => (
+                  <EstablecimientoItem e={establecimiento} key={index} />
+                ))}
             </div>
           </div>
         )}

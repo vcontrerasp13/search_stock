@@ -5,7 +5,7 @@ export const EstablecimientoItem = ({ e }) => {
   return (
     <div className="btn btn-block no-animation text-left">
       <HiOutlineMapPin />
-      {e.nombre}
+      {e.nombre} - {e.cantidad}
     </div>
   );
 };
