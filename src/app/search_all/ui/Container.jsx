@@ -1,8 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import InputSearch from "./inputSearch";
-import { ResultContainer } from "@/components/search/resultContainer";
+import { ResultContainer } from "@/components/search_all/resultContainer";
 import { Loader } from "@/components/ui/Loader";
+import { establecimientoStore } from "@/store/establecimientoStore";
+import { toast } from "sonner";
+import { Pagination } from "@/components/ui/Pagination";
 
 export const Container = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,6 +15,12 @@ export const Container = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [message, setMessage] = useState("");
 
+
+  // Estado para paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+
   const getProduct = async () => {
     setIsLoading(true);
     let url = `/api/Articulo/ConsultarStock?ItemCode=${itemCode.toUpperCase()}&WshCode=${wshCode}`;
@@ -20,12 +29,12 @@ export const Container = () => {
       const response = await fetch(url);
 
       if (response.status === 400) {
-        const errorData = await response.json(); // Extrae los detalles del error
-        setMessage(errorData.message || "Error desconocido"); // Muestra el mensaje de error si existe
-        setProduct([]); // Vacía los productos
+        const errorData = await response.json();
+        setMessage(errorData.message || "Error desconocido");
+        setProduct([]);
       } else {
-        const data = await response.json(); // Extrae los datos si la respuesta es exitosa
-        setProduct(data); // Establece los productos con los datos recibidos
+        const data = await response.json();
+        setProduct(data);
       }
     } catch (error) {
       console.log(error);
@@ -34,36 +43,72 @@ export const Container = () => {
     }
   };
 
+
+  // Guardar en establecimientoStore
+  const setEstablecimientos = establecimientoStore(state => state.setEstablecimientos)
+  useEffect(() => {
+    setEstablecimientos();
+  }, [])
+
+
   const handleSearch = async () => {
     if (!itemCode.trim()) {
-      alert("Por favor, ingresa un término de búsqueda.");
+      toast.warning("Por favor, ingresa un término de búsqueda.")
       return;
     }
     await getProduct();
-
+    setCurrentPage(1);
     setHasSearched(true);
   };
 
-  return (
-    <div className=" ">
-      {/* Input Search */}
 
+
+  // Calcular productos a mostrar en función de la página actual
+  const indexOfLastProduct = currentPage * itemsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
+  const currentProducts = product.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  // Cambiar página
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+
+
+  return (
+    <div className="flex flex-col items-center gap-2  ">
+
+      {/* Input Search */}
       <InputSearch
         setItemCode={setItemCode}
         itemCode={itemCode}
         handleSearch={handleSearch}
       />
-      {/* container Result */}
 
+      {/* container Result */}
       {hasSearched &&
         (isLoading ? (
           <Loader />
         ) : (
           <ResultContainer
-            product={product}
+            product={currentProducts}
             message={message}
           />
         ))}
+
+
+
+      {/* Pagination */}
+      {product.length > itemsPerPage && (
+        <Pagination
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          totalItems={product.length}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
+
+
   );
 };

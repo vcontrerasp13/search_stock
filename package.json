@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "next": "14.2.15",
+    "next-nprogress-bar": "^2.3.14",
     "nextjs-cors": "^2.2.0",
     "pg": "^8.13.0",
     "react": "^18",

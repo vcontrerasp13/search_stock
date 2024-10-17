@@ -5,10 +5,10 @@ import { ResultContainer } from "@/components/search/resultContainer";
 import { Loader } from "@/components/ui/Loader";
 import { userStore } from "@/store/userStore";
 import { toast } from "sonner";
-import { establecimientoStore } from "@/store/establecimientoStore";
 import Image from "next/image";
 import search_img from "/public/images/image2.svg";
 import { Pagination } from "@/components/ui/Pagination";
+import { establecimientoStore } from "@/store/establecimientoStore";
 
 export const Container = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,22 +21,13 @@ export const Container = () => {
 
   // Estado para paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; 
+  const itemsPerPage = 10;
 
-
-  const setEstablecimientos = establecimientoStore(
-    (state) => state.setEstablecimientos
-  );
-
-  useEffect(() => {
-    setEstablecimientos();
-  }, []);
 
   // obtner Productos
   const getProduct = async () => {
     setIsLoading(true);
-    let url = `/api/Articulo/ConsultarStock?ItemCode=${itemCode.toUpperCase()}&WshCode=${user.cod_establec
-      }`;
+    let url = `/api/Articulo/ConsultarStock?ItemCode=${itemCode.toUpperCase()}&WshCode=${user.cod_establec}`;
 
     try {
       const response = await fetch(url);
@@ -56,13 +47,22 @@ export const Container = () => {
     }
   };
 
+
+
+  // Guardar en establecimientoStore
+  const setEstablecimientos = establecimientoStore(state => state.setEstablecimientos)
+  useEffect(() => {
+    setEstablecimientos();
+  }, [])
+
+
   const handleSearch = async () => {
     if (!itemCode.trim()) {
       toast.warning("Por favor ingresar un cod.");
       return;
     }
     await getProduct();
-    setCurrentPage(1); 
+    setCurrentPage(1);
     setHasSearched(true);
   };
 
@@ -75,6 +75,9 @@ export const Container = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+
+
 
   return (
     <div className="flex flex-col items-center gap-2 ">

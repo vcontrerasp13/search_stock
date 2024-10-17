@@ -1,21 +1,18 @@
 "use client";
-import Card from "@/app/search/ui/Card";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+
 import { establecimientoStore } from "@/store/establecimientoStore";
 import { EstablecimientoItem } from "./establecimientoItem";
-import { useEffect, useState } from "react";
+import Card from "@/app/search/ui/Card";
 import { productStore } from "@/store/productStore";
 import { userStore } from "@/store/userStore";
 import { ordernarEstablecimientosDistancia } from "../../../utils/helper";
 import box_empty from "/public/images/image1.svg"
-import Image from "next/image";
-import { Pagination } from "../ui/Pagination";
 
 export const ResultContainer = ({ product, message, itemCode = "" }) => {
-  const establecimientos = establecimientoStore(
-    (state) => state.establecimientos
-  );
+  const establecimientos = establecimientoStore((state) => state.establecimientos);
   const userdata = userStore((state) => state.user);
-  // console.log(userdata);
 
   console.log(product.length); //0
 
@@ -26,16 +23,12 @@ export const ResultContainer = ({ product, message, itemCode = "" }) => {
     setProduct(itemCode);
   }, []);
 
-  // console.log(productsAll);
 
   const origen = establecimientos.find((e) => e.id == userdata.cod_establec);
   // const origen = establecimientos.find((e) => e.id == "ALM109");
-  const establec_ordenados = ordernarEstablecimientosDistancia(
-    establecimientos,
-    origen
-  );
-  console.log(establec_ordenados);
-  console.log(dataWithStock);
+  const establec_ordenados = ordernarEstablecimientosDistancia(establecimientos, origen);
+
+
 
   return (
     <div className="grid grid-cols-2 gap-2">
@@ -59,7 +52,7 @@ export const ResultContainer = ({ product, message, itemCode = "" }) => {
             {/* Mostrar lista de almacenes con stock */}
             <div className="flex flex-col gap-2 mt-5">
               {establec_ordenados.map((establecimiento, index) => (
-                <EstablecimientoItem name={establecimiento.nombre} key={index} />
+                <EstablecimientoItem e={establecimiento} key={index} />
               ))}
             </div>
           </div>

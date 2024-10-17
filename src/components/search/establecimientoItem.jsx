@@ -1,11 +1,11 @@
 import React from "react";
 import { HiOutlineMapPin } from "react-icons/hi2";
 
-export const EstablecimientoItem = ({ name }) => {
+export const EstablecimientoItem = ({ e }) => {
   return (
     <div className="btn btn-block no-animation text-left">
       <HiOutlineMapPin />
-      {name}
+      {e.nombre}
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { HiOutlineSearch } from "react-icons/hi";
 
 export default function Home() {
   return (
-    <div className="min-h-screen p-2">
+    <div className="p-2">
       {/* <NavSearch /> */}
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 ">
         {/* <h2 className="text-3xl">Bienvenido Administrador</h2> */}

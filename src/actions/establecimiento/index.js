@@ -1,5 +1,7 @@
 'use server'
-export const establecimientoAction = async () => {
+
+
+export const getEstabecimiento = async () => {
     try {
         const url = "http://localhost:3000/api/establecimiento"
         const response = await fetch(url);
@@ -17,3 +19,4 @@ export const establecimientoAction = async () => {
         console.log(error.message);
     }
 }
+
