@@ -10,7 +10,7 @@ export const NavSearch = () => {
     <div className="navbar bg-base-100 sticky top-0 z-50">
       <div className="flex-1">
         <Link href="/" className="btn btn-ghost text-xl">
-          {user.user_name} - {user.cod_establec}
+          {user?.username} - {user?.establecimientos.map(e => e.id).join(' || ')}
         </Link>
       </div>
       <div className="flex-none">

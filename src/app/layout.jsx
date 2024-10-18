@@ -1,8 +1,10 @@
 import localFont from "next/font/local";
-import "./globals.css";
+// import "../globals.css";
+import './globals.css'
 import { Toaster } from "sonner";
-import { NavSearch } from "./search/ui/NavSearch";
+// import { NavSearch } from "./search/ui/NavSearch";
 import NProgressBar from "@/components/NprogressBar";
+import { NavSearch } from "./search/ui/NavSearch";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,10 +30,10 @@ export default function RootLayout({ children }) {
         data-theme="light"
 
       >
-        <NavSearch />
+        {/* <NavSearch /> */}
 
         <NProgressBar>
-          {children}
+        {children}
 
         </NProgressBar>
         <Toaster richColors />

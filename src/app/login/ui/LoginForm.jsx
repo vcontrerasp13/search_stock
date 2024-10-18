@@ -12,6 +12,7 @@ const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const setUser = userStore((state) => state.setUser);
+  const user = userStore(state => state.user)
   const router = useRouter();
 
   const handleLogin = async (e) => {
@@ -24,7 +25,7 @@ const LoginForm = () => {
         localStorage.setItem("user", JSON.stringify(result.data));
         // actualizar el estado de User
         setUser(result.data);
-        
+
         router.push("/");
       } else {
         toast.error(result.message);
@@ -33,6 +34,7 @@ const LoginForm = () => {
       toast.error(error.message);
     }
   };
+
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -79,6 +81,9 @@ const LoginForm = () => {
               required
             />
           </label>
+
+          {/* <SelectEstablecimiento  /> */}
+
           <div>
             <button type="submit" className="btn btn-primary btn-block">
               Ingresar

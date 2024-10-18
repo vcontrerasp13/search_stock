@@ -7,14 +7,14 @@ export async function POST(req) {
         const result = await loginController(user, password);
 
         if (result.success) {
-            return NextResponse.json(result, { status: 200 });
+            return NextResponse.json(result, { status: 200 }); 
         } else {
-            return NextResponse.json(result, { status: 401 });
+            return NextResponse.json(result, { status: 401 }); 
         }
     } catch (error) {
         return NextResponse.json({
             error: error.message,
             message: "Hubo un error en la consulta"
-        }, { status: 500 });
+        }, { status: 500 }); 
     }
 }

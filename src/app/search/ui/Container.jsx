@@ -9,6 +9,7 @@ import Image from "next/image";
 import search_img from "/public/images/image2.svg";
 import { Pagination } from "@/components/ui/Pagination";
 import { establecimientoStore } from "@/store/establecimientoStore";
+import { getArticulo } from "@/actions/articulo/getArticulo";
 
 export const Container = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +28,7 @@ export const Container = () => {
   // obtner Productos
   const getProduct = async () => {
     setIsLoading(true);
-    let url = `/api/Articulo/ConsultarStock?ItemCode=${itemCode.toUpperCase()}&WshCode=${user.cod_establec}`;
+    let url = `/api/Articulo/ConsultarStock?ItemCode=${itemCode.toUpperCase()}&WshCode=${user.establecimientos[0].id}`;
 
     try {
       const response = await fetch(url);
@@ -62,6 +63,19 @@ export const Container = () => {
       return;
     }
     await getProduct();
+
+    // buscar Articulo deseado en la base de datos de Articulos
+    const articulos = await getArticulo();
+    console.log(articulos, '💀💀');
+    const findArticulo = articulos.data.some(a => a.id === itemCode.trim());
+    // si existe el articulo, se guardará en la tbl_searched 
+    if (findArticulo) {
+      console.log("guardar en la bd")
+      await insertArticulo()
+    } else {
+      toast.warning("no se encontró en la bd")
+    }
+
     setCurrentPage(1);
     setHasSearched(true);
   };

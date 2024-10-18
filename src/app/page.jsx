@@ -2,11 +2,12 @@ import Link from "next/link";
 import { HiOutlineOfficeBuilding } from "react-icons/hi";
 import { HiOutlineGlobeAlt } from "react-icons/hi";
 import { HiOutlineSearch } from "react-icons/hi";
+import { NavSearch } from "./search/ui/NavSearch";
 
 export default function Home() {
   return (
     <div className="p-2">
-      {/* <NavSearch /> */}
+      <NavSearch />
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 ">
         {/* <h2 className="text-3xl">Bienvenido Administrador</h2> */}
 

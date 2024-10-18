@@ -3,10 +3,10 @@ import React, { useEffect, useRef } from "react";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 
 const InputSearch = ({ setItemCode, itemCode, handleSearch }) => {
-  const emailInput = useRef(null);
+  const searchInput = useRef(null);
   useEffect(() => {
-    if (emailInput.current) {
-      emailInput.current.focus();
+    if (searchInput.current) {
+      searchInput.current.focus();
     }
   }, []);
 
@@ -19,7 +19,7 @@ const InputSearch = ({ setItemCode, itemCode, handleSearch }) => {
         value={itemCode}
         onChange={(e) => setItemCode(e.target.value.trim())}
         autoFocus
-        ref={emailInput}
+        ref={searchInput}
       />
       <button
         onClick={handleSearch}
