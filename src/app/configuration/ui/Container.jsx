@@ -18,7 +18,7 @@ export const Container = () => {
                 <div className="label">
                     <span className="label-text">Nombre:</span>
                 </div>
-                <input type="text" value={'admin'} className="input input-bordered w-full max-w-xs" disabled {...register("username", { required: true })} />
+                <input type="text"  className="input input-bordered w-full max-w-xs"  {...register("username", { required: true })} />
 
             </label>
             <SelectEstablecimiento />
