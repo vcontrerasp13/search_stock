@@ -13,7 +13,8 @@ import box_empty from "/public/images/image1.svg";
 export const ResultContainer = ({ product, message, itemCode = "" }) => {
   const establecimientos = establecimientoStore((state) => state.establecimientos);
   const userdata = userStore((state) => state.user);
-  
+  console.log(userdata, '💀💀💀💀💀🟢')
+
   const [loading, setLoading] = useState(true);  // Estado de carga
 
   const setProduct = productStore((state) => state.setProduct);
@@ -44,7 +45,7 @@ export const ResultContainer = ({ product, message, itemCode = "" }) => {
       };
     });
 
-  const origen = establecimientos.find((e) => e.id === userdata.cod_establec);
+  const origen = establecimientos.find((e) => e.id === userdata.establecimientos[0].id);
   const establec_ordenados = ordernarEstablecimientosDistancia(productosConEstablecimiento, origen);
 
   if (loading) {

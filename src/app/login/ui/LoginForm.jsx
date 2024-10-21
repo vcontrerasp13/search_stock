@@ -3,37 +3,54 @@ import React, { useState } from "react";
 import Image from "next/image";
 import logo from "/public/images/logo.jpg";
 import { HiOutlineKey, HiOutlineUser } from "react-icons/hi2";
-import { loginAction } from "@/actions/loginAction";
+// import { loginAction } from "@/actions/loginAction";
 import { toast } from "sonner";
-import { userStore } from "@/store/userStore";
+// import { userStore } from "@/store/userStore";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { login } from "@/actions/auth/login";
 
 const LoginForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const setUser = userStore((state) => state.setUser);
-  const user = userStore(state => state.user)
+  const [errorMessage, setErrorMessage] = useState('')
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const result = await loginAction(username, password);
-      if (result.success) {
-        toast.info(result.message);
-        // guardar en localStorage
-        localStorage.setItem("user", JSON.stringify(result.data));
-        // actualizar el estado de User
-        setUser(result.data);
 
-        router.push("/");
-      } else {
-        toast.error(result.message);
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const result = await loginAction(username, password);
+  //     if (result.success) {
+  //       toast.info(result.message);
+  //     } else {
+  //       toast.error(result.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
+
+
+  const onSubmit = async (data) => {
+    setErrorMessage("");
+    const { username, password } = data;
+    // console.log(data)
+    try {
+      setLoading(true);
+      const response = await login(username, password);
+      if (!response.ok) {
+        toast.error(response.message)
       }
+      router.push('/')
     } catch (error) {
-      toast.error(error.message);
+      console.log(error)
+    } finally {
+
+      setLoading(false)
     }
-  };
+  }
 
 
   return (
@@ -56,7 +73,7 @@ const LoginForm = () => {
           className="space-y-6"
           action="#"
           method="POST"
-          onSubmit={handleLogin}
+          onSubmit={handleSubmit(onSubmit)}
         >
           <label className="input input-bordered flex items-center gap-2">
             <HiOutlineUser />
@@ -65,9 +82,10 @@ const LoginForm = () => {
               type="text"
               className="grow"
               placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
+              // value={username}
+              // onChange={(e) => setUsername(e.target.value)}
+              // required
+              {...register('username', { required: true })}
             />
           </label>
           <label className="input input-bordered flex items-center gap-2">
@@ -76,16 +94,18 @@ const LoginForm = () => {
               type="password"
               className="grow"
               placeholder="********"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              // value={password}
+              // onChange={(e) => setPassword(e.target.value)}
+              // required
+              {...register('password', { required: true })}
             />
           </label>
 
           {/* <SelectEstablecimiento  /> */}
-
+          <span className="text-red-500">{errorMessage} </span>
           <div>
-            <button type="submit" className="btn btn-primary btn-block">
+            <button type="submit" className={`btn btn-block ${!loading ? " btn-primary" : "btn-disabled"}`}
+              disabled={loading}>
               Ingresar
             </button>
           </div>

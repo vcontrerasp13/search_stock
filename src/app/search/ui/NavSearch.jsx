@@ -1,16 +1,30 @@
 "use client";
-import { userStore } from "@/store/userStore";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
+import { handleSignOut } from "@/actions/auth/logout";
+import { userStore } from "@/store/userStore";
 
-export const NavSearch = () => {
-  const user = userStore((state) => state.user);
-  console.log(user);
+export const NavSearch = ({ session }) => {
+  const { username, establecimientos } = session.user;
+  console.log(session, '🚩🚩')
+  const setUser = userStore(state => state.setUser);
+
+
+
+  const closeSession = async () => {
+    await handleSignOut()
+  }
+
+  useEffect(() => {
+    setUser(session.user);
+
+  }, [])
+
   return (
     <div className="navbar bg-base-100 sticky top-0 z-50">
       <div className="flex-1">
         <Link href="/" className="btn btn-ghost text-xl">
-          {user?.username} - {user?.establecimientos.map(e => e.id).join(' || ')}
+          {username} - {establecimientos.map(e => e.id).join(' || ')}
         </Link>
       </div>
       <div className="flex-none">
@@ -41,7 +55,7 @@ export const NavSearch = () => {
               <a>Settings</a>
             </li>
             <li>
-              <a>Logout</a>
+              <button onClick={closeSession}>Logout</button>
             </li>
           </ul>
         </div>

@@ -2,10 +2,11 @@ import { loginModel } from '@/models/userModel.js';
 
 
 
-export const loginController = async (user, password) => {
+export const loginController = async (username, password) => {
 
     try {
-        const users = await loginModel(user, password);
+        console.log({ username, password });
+        const users = await loginModel(username, password);
 
         return users
     } catch (error) {

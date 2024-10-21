@@ -1,10 +1,10 @@
 import localFont from "next/font/local";
-// import "../globals.css";
 import './globals.css'
 import { Toaster } from "sonner";
-// import { NavSearch } from "./search/ui/NavSearch";
 import NProgressBar from "@/components/NprogressBar";
+import { SessionProvider } from "next-auth/react";
 import { NavSearch } from "./search/ui/NavSearch";
+import { auth } from "@/auth";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -22,22 +22,25 @@ export const metadata = {
   description: "Sistema para control stock",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+
   return (
-    <html lang="es" data-theme="light" className="bg-slate-100">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-xl mx-auto min-w-[320px] min-h-screen`}
-        data-theme="light"
+    <SessionProvider>
 
-      >
-        {/* <NavSearch /> */}
+      <html lang="es" data-theme="light" className="bg-slate-100">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-xl mx-auto min-w-[320px] min-h-screen`}
+          data-theme="light"
 
-        <NProgressBar>
-        {children}
+        >
+          <NProgressBar>
 
-        </NProgressBar>
-        <Toaster richColors />
-      </body>
-    </html>
+            {children}
+
+            <Toaster richColors />
+          </NProgressBar>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

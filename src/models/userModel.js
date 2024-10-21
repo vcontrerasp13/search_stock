@@ -7,16 +7,8 @@ export const loginModel = async (username, password) => {
         let queryUser = `SELECT * FROM tbl_users WHERE user_name=$1`;
         let valuesUser = [username]
         const userResult = await pool.query(queryUser, valuesUser);
-        const id_user = userResult.rows[0].id
+        const id_user = userResult.rows[0]?.id
 
-        let queryEstablecimientos = `SELECT e.id, e.nombre, e.lat, e.lon
-                                    FROM tbl_establecimiento e
-                                    JOIN tbl_user_establec ue ON e.id = ue.id_establec
-                                    WHERE ue.id_user = $1;`;
-
-        let valuesEstablecimientos = [id_user];
-
-        const establecimientosResult = await pool.query(queryEstablecimientos, valuesEstablecimientos);
 
         if (userResult.rows.length === 0) {
             // throw new Error('Usuario no encontrado');
@@ -32,6 +24,15 @@ export const loginModel = async (username, password) => {
             message = 'Contraseña incorrecta';
             return { success: false, message }
         }
+        let queryEstablecimientos = `SELECT e.id, e.nombre, e.lat, e.lon
+        FROM tbl_establecimiento e
+        JOIN tbl_user_establec ue ON e.id = ue.id_establec
+        WHERE ue.id_user = $1;`;
+
+        let valuesEstablecimientos = [id_user];
+
+        const establecimientosResult = await pool.query(queryEstablecimientos, valuesEstablecimientos);
+
 
         return {
             success: true, message, user: {
@@ -42,7 +43,7 @@ export const loginModel = async (username, password) => {
             }
         };
     } catch (error) {
-        console.error('Error en loginUser:', error.message);
-        throw error;
+        console.error('Error en userModel:', error.message);
+        // throw error;
     }
 };

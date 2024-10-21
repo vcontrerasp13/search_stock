@@ -24,7 +24,7 @@ export const Container = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-
+  console.log(user, '👀👀👀👀🚩')
   // obtner Productos
   const getProduct = async () => {
     setIsLoading(true);
@@ -71,7 +71,7 @@ export const Container = () => {
     // si existe el articulo, se guardará en la tbl_searched 
     if (findArticulo) {
       console.log("guardar en la bd")
-      await insertArticulo()
+      // await insertArticulo()
     } else {
       toast.warning("no se encontró en la bd")
     }

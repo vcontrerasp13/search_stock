@@ -3,11 +3,19 @@ import { HiOutlineOfficeBuilding } from "react-icons/hi";
 import { HiOutlineGlobeAlt } from "react-icons/hi";
 import { HiOutlineSearch } from "react-icons/hi";
 import { NavSearch } from "./search/ui/NavSearch";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+  console.log(session)
+  if (!session) {
+    return redirect('/auth/signin');
+  }
+
   return (
     <div className="p-2">
-      <NavSearch />
+      <NavSearch session={session}/>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 ">
         {/* <h2 className="text-3xl">Bienvenido Administrador</h2> */}
 

@@ -1,8 +1,11 @@
 import React from "react";
 
 import LoginForm from "./ui/LoginForm";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-const page = () => {
+const page = async () => {
+ 
   return (
     <div>
       <LoginForm />
