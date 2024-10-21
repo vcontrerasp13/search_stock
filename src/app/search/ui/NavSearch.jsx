@@ -47,12 +47,12 @@ export const NavSearch = ({ session }) => {
           >
             <li>
               <a className="justify-between">
-                Profile
+                Perfil
                 <span className="badge">New</span>
               </a>
             </li>
             <li>
-              <a>Settings</a>
+              <Link href='/configuration'>Configuración</Link>
             </li>
             <li>
               <button onClick={closeSession}>Logout</button>
