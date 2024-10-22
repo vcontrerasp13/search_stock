@@ -16,8 +16,8 @@ export const Container = () => {
 
 
     return (
-        <div className='flex flex-col gap-2'>
-
+        <div className='flex flex-col gap-2 p-4'>
+            <h2 className="text-3xl">Seleccionar Establecimiento</h2>
             {
                 loading
                     ? (<Loader />)

@@ -6,5 +6,6 @@ export const establecimientoStore = create((set) => ({
     setEstablecimientos: async () => {
         const establecimientos = await getEstabecimiento();
         set({ establecimientos: establecimientos.data });
-    }
+    },
+   
 }))

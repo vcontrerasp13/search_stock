@@ -8,15 +8,15 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
   const session = await auth();
-  console.log(session)
+
   if (!session) {
     return redirect('/auth/signin');
   }
 
   return (
-    <div className="p-2">
-      <NavSearch session={session}/>
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 ">
+    <div className="">
+      <NavSearch session={session} />
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 p-4 ">
         {/* <h2 className="text-3xl">Bienvenido Administrador</h2> */}
 
         <Link

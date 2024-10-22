@@ -1,43 +1,32 @@
 'use client'
 import { Loader } from '@/components/ui/Loader'
 import { userStore } from '@/store/userStore'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
-export const SelectEstablecimiento = () => {
+export const SelectEstablecimiento = ({ register, errors, establecCurrent, setEstablecCurrent }) => {
+    const establec_access = userStore(state => state.establec_access);
 
-    const data_user = userStore(state => state.user)
-
-    const [loading, setLoading] = useState(false);
-    const [establec, setEstablec] = useState([]);
-
-    useEffect(() => {
-        setLoading(true);
-        const user_establec = data_user.establecimientos;
-        setEstablec(user_establec);
-        setLoading(false);
-    }, [data_user])
-
-
+    console.log(establecCurrent, '🟢')
     return (
         <>
-
-            <label className="form-control w-full max-w-xs">
+            <label className="form-control w-full ">
                 <div className="label">
                     <span className="label-text">Establecimiento:</span>
                 </div>
 
-                {loading
-                    ? (<Loader />)
-                    : (<select className="select select-bordered w-full max-w-xs ">
-                        {establec?.map(e => (
+                <select
+                    className="select select-bordered w-full "
+                    defaultValue={establecCurrent}
+                    onChange={e => setEstablecCurrent(e.target.value)}
+                    {...register("establecimiento", { required: true })}
 
-                            <option value={e.id} key={e.id}>{e.nombre}</option>
-                        ))}
-                    </select>)}
+                >
+                    {establec_access?.map(e => (
+                        <option value={e.id} key={e.id}>{e.nombre}</option>
+                    ))}
+                </select>
 
-            </label>
-
+            </label >
         </>
-
     )
 }

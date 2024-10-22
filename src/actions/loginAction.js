@@ -12,7 +12,7 @@ export const getUserFromDb = async (username, password) => {
         const data = await response.json();
 
         if (response.ok) {
-            return { success: true, message: data.message, data: data.user };
+            return { success: true, message: data.message, data: data };
         } else {
             return { success: false, message: data.message };
         }

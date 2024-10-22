@@ -45,7 +45,7 @@ export const ResultContainer = ({ product, message, itemCode = "" }) => {
       };
     });
 
-  const origen = establecimientos.find((e) => e.id === userdata.establecimientos[0].id);
+  const origen = establecimientos.find((e) => e.id === userdata.id_establec_current);
   const establec_ordenados = ordernarEstablecimientosDistancia(productosConEstablecimiento, origen);
 
   if (loading) {

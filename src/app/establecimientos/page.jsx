@@ -10,9 +10,9 @@ const pageEstablecimientos = async () => {
   }
 
   return (
-    <div className="flex flex-col p-2 gap-2">
-      <NavSearch />
-      <h2 className="text-3xl">Seleccionar Establecimiento</h2>
+    <div className="flex flex-col gap-2">
+      <NavSearch session={session} />
+  
       <Container />
     </div >
   );

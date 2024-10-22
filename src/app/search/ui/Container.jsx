@@ -24,11 +24,10 @@ export const Container = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  console.log(user, '👀👀👀👀🚩')
   // obtner Productos
   const getProduct = async () => {
     setIsLoading(true);
-    let url = `/api/Articulo/ConsultarStock?ItemCode=${itemCode.toUpperCase()}&WshCode=${user.establecimientos[0].id}`;
+    let url = `/api/Articulo/ConsultarStock?ItemCode=${itemCode.toUpperCase()}&WshCode=${user.id_establec_current}`;
 
     try {
       const response = await fetch(url);
@@ -66,7 +65,6 @@ export const Container = () => {
 
     // buscar Articulo deseado en la base de datos de Articulos
     const articulos = await getArticulo();
-    console.log(articulos, '💀💀');
     const findArticulo = articulos.data.some(a => a.id === itemCode.trim());
     // si existe el articulo, se guardará en la tbl_searched 
     if (findArticulo) {
@@ -94,7 +92,7 @@ export const Container = () => {
 
 
   return (
-    <div className="flex flex-col items-center gap-2 ">
+    <div className="flex flex-col items-center gap-2 p-4 ">
       {/* Input Search */}
       <InputSearch
         setItemCode={setItemCode}

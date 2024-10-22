@@ -1,30 +1,37 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { handleSignOut } from "@/actions/auth/logout";
 import { userStore } from "@/store/userStore";
 
 export const NavSearch = ({ session }) => {
-  const { username, establecimientos } = session.user;
-  console.log(session, '🚩🚩')
-  const setUser = userStore(state => state.setUser);
+  const { id_user } = session.user.user;
+  const [loading, setLoading] = useState(false);
 
-
+  const setDataUser = userStore(state => state.setDataUser);
+  const user = userStore(state => state.user);
 
   const closeSession = async () => {
+    setLoading(true);
     await handleSignOut()
+    setLoading(false);
   }
 
-  useEffect(() => {
-    setUser(session.user);
 
-  }, [])
+
+  useEffect(() => {
+    if (id_user) {
+      setDataUser(id_user)
+    }
+
+  }, [id_user, setDataUser])
+
 
   return (
-    <div className="navbar bg-base-100 sticky top-0 z-50">
+    <div className="navbar bg-accent text-accent-content sticky top-0 z-50">
       <div className="flex-1">
         <Link href="/" className="btn btn-ghost text-xl">
-          {username} - {establecimientos.map(e => e.id).join(' || ')}
+          {user?.username}  - {user?.establec_current}
         </Link>
       </div>
       <div className="flex-none">
@@ -48,14 +55,13 @@ export const NavSearch = ({ session }) => {
             <li>
               <a className="justify-between">
                 Perfil
-                <span className="badge">New</span>
               </a>
             </li>
             <li>
               <Link href='/configuration'>Configuración</Link>
             </li>
             <li>
-              <button onClick={closeSession}>Logout</button>
+              <button onClick={closeSession} disabled={loading}> {loading ? "Cerrando..." : "Cerrar"}</button>
             </li>
           </ul>
         </div>

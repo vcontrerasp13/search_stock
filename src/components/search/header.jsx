@@ -5,7 +5,7 @@ import { HiArrowSmallLeft } from "react-icons/hi2";
 
 export const HeaderSearch = () => {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 p-4">
       <Link href="/">
         <HiArrowSmallLeft size={30} className="text-center text-orange-400" />
       </Link>
