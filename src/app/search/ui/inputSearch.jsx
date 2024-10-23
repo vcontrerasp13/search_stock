@@ -4,6 +4,7 @@ import { HiMagnifyingGlass } from "react-icons/hi2";
 
 const InputSearch = ({ setItemCode, itemCode, handleSearch }) => {
   const searchInput = useRef(null);
+  
   useEffect(() => {
     if (searchInput.current) {
       searchInput.current.focus();

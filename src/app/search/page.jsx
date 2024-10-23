@@ -11,7 +11,7 @@ const pageSearch = async () => {
   }
   return (
     <div className="flex flex-col">
-      <NavSearch session={session}/>
+      <NavSearch session={session} />
 
       <HeaderSearch />
       <Container />

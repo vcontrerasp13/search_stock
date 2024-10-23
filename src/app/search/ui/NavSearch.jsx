@@ -3,8 +3,11 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { handleSignOut } from "@/actions/auth/logout";
 import { userStore } from "@/store/userStore";
+import { useSession } from "next-auth/react";
 
 export const NavSearch = ({ session }) => {
+  const { data, status } = useSession()
+
   const { id_user } = session.user.user;
   const [loading, setLoading] = useState(false);
 
@@ -24,15 +27,18 @@ export const NavSearch = ({ session }) => {
       setDataUser(id_user)
     }
 
-  }, [id_user, setDataUser])
-
+  }, [id_user, setDataUser, loading])
 
   return (
     <div className="navbar bg-accent text-accent-content sticky top-0 z-50">
       <div className="flex-1">
-        <Link href="/" className="btn btn-ghost text-xl">
-          {user?.username}  - {user?.establec_current}
-        </Link>
+
+        {
+          status === 'loading'
+            ? (<div className="skeleton h-5 w-40"></div>)
+            : (<Link href="/" className="btn btn-ghost text-xl">{user?.username}  - {user?.establec_current} </Link>)
+
+        }
       </div>
       <div className="flex-none">
         <div className="dropdown dropdown-end">
@@ -66,6 +72,6 @@ export const NavSearch = ({ session }) => {
           </ul>
         </div>
       </div>
-    </div>
+    </div >
   );
 };

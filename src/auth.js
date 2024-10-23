@@ -2,7 +2,6 @@ import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { signInSchema } from "./lib/zod"
 import { getUserFromDb } from "./actions/loginAction"
-import { NextResponse } from "next/server"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 
@@ -70,4 +69,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // error: "/error",
     },
     secret: process.env.AUTH_SECRET,
+    debug: true,
 })

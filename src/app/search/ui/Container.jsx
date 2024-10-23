@@ -55,24 +55,60 @@ export const Container = () => {
     setEstablecimientos();
   }, [])
 
+  let groupedData = [];
 
   const handleSearch = async () => {
     if (!itemCode.trim()) {
       toast.warning("Por favor ingresar un cod.");
       return;
     }
+
+    if (itemCode.length < 4) {
+      toast.warning("El código debe tener al menos 4 caracteres.")
+      return;
+    }
+
+
+    console.log(itemCode, '👀')
     await getProduct();
 
-    // buscar Articulo deseado en la base de datos de Articulos
-    const articulos = await getArticulo();
-    const findArticulo = articulos.data.some(a => a.id === itemCode.trim());
-    // si existe el articulo, se guardará en la tbl_searched 
-    if (findArticulo) {
-      console.log("guardar en la bd")
-      // await insertArticulo()
+    if (itemCode.includes("-")) {
+      // buscar Articulo deseado en la base de datos de Articulos
+      const articulos = await getArticulo();
+      const findArticulo = articulos.data.some(a => a.id === itemCode.trim());
+      // si existe el articulo, se guardará en la tbl_searched 
+      if (findArticulo) {
+        console.log("guardar en la bd")
+        // await insertArticulo()
+      } else {
+        toast.warning("no se encontró en la bd")
+      }
     } else {
-      toast.warning("no se encontró en la bd")
+      // busqueda por cod. padre
+
+
+      console.log(currentProducts, '🚩🚩🚩')
+      //  agrupar por color
+      groupedData = Object.values(currentProducts.reduce((acc, item) => {
+        // Extraer el código de color (en este caso "BLA" o "AZU")
+        const colorCode = item.itemCode.split('-')[1];
+
+        // Si el código ya existe en el acumulador, sumar el onHand
+        if (acc[colorCode]) {
+          acc[colorCode].cantidad += item.onHand;
+        } else {
+          // Si no existe, crear un nuevo objeto con colorCode y cantidad
+          acc[colorCode] = { colorCode, cantidad: item.onHand };
+        }
+
+        return acc;
+      }, {}));
+
+
     }
+
+
+
 
     setCurrentPage(1);
     setHasSearched(true);
@@ -92,7 +128,7 @@ export const Container = () => {
 
 
   return (
-    <div className="flex flex-col items-center gap-2 p-4 ">
+    <div className="flex flex-col items-center gap-2 px-4 ">
       {/* Input Search */}
       <InputSearch
         setItemCode={setItemCode}
@@ -133,6 +169,11 @@ export const Container = () => {
           onPageChange={handlePageChange}
         />
       )}
+
+
+      {
+        JSON.stringify(groupedData)
+      }
     </div>
   );
 };

@@ -13,7 +13,6 @@ import box_empty from "/public/images/image1.svg";
 export const ResultContainer = ({ product, message, itemCode = "" }) => {
   const establecimientos = establecimientoStore((state) => state.establecimientos);
   const userdata = userStore((state) => state.user);
-  console.log(userdata, '💀💀💀💀💀🟢')
 
   const [loading, setLoading] = useState(true);  // Estado de carga
 

@@ -3,8 +3,6 @@ import './globals.css'
 import { Toaster } from "sonner";
 import NProgressBar from "@/components/NprogressBar";
 import { SessionProvider } from "next-auth/react";
-import { NavSearch } from "./search/ui/NavSearch";
-import { auth } from "@/auth";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,7 +23,7 @@ export const metadata = {
 export default async function RootLayout({ children }) {
 
   return (
-    <SessionProvider>
+    <SessionProvider >
 
       <html lang="es" data-theme="light" className="bg-slate-100">
         <body

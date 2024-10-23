@@ -1,0 +1,6 @@
+/* sweetAlert.css */
+.my-swal {
+    z-index: 9999 !important;
+    background-color: red;
+    /* Asegúrate de que sea un valor alto */
+}
