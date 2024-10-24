@@ -4,7 +4,13 @@ import { create } from 'zustand'
 export const productStore = create((set) => ({
     product: [],
     setProduct: async (itemCode, wshCode) => {
-        const data = await getProduct(itemCode, wshCode);
-        set({ product: data });
+        try {
+            const data = await getProduct(itemCode, wshCode);
+            
+            set({ product: data });
+
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 }))

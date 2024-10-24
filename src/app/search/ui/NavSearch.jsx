@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 
 export const NavSearch = ({ session }) => {
   const { data, status } = useSession();
-  console.log(session,'👀');
+
   const { id_user } = session.user.user;
   const [loading, setLoading] = useState(false);
 
