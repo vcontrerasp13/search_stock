@@ -3,22 +3,29 @@ import box_empty from "/public/images/image1.svg";
 import Image from 'next/image';
 
 
-export const GroupedData = ({ currentGroupedData, product }) => {
+export const GroupedData = ({ currentGroupedData, total }) => {
+
     return (
         <div className="grid grid-cols-2 gap-2 w-full">
-            {(currentGroupedData.length > 0 & product.length > 0)
-                && (
-                    currentGroupedData.map((color, i) => (
-                        <div key={i} className="border p-2 rounded-md">
-                            <p className="text-base font-semibold">COD:
-                                <span className="text-base font-normal">{color.codPadre} - {color.colorCode}</span>
-                            </p>
-                            <p className="text-base font-semibold">Cantidad:
-                                <span className="text-base font-normal">{color.cantidad}</span>
-                            </p>
-                        </div>
-                    ))
-                )
+
+            <div className="flex flex-row items-center gap-2 col-span-2">
+                <p className="text-base font-semibold">Total en stock: {total}</p>
+            </div>
+
+            {
+                // (currentGroupedData.length > 0 && total > 0)
+                // && (
+                currentGroupedData.map((item, i) => (
+                    <div key={i} className="border p-2 rounded-md">
+                        <p className="text-base font-semibold">COD:
+                            <span className="text-base font-normal">{item.itemCode}</span>
+                        </p>
+                        <p className="text-base font-semibold">Cantidad:
+                            <span className="text-base font-normal">{item.onHand}</span>
+                        </p>
+                    </div>
+                ))
+                // )
 
 
             }
@@ -35,6 +42,7 @@ export const GroupedData = ({ currentGroupedData, product }) => {
                     />
                 </div>
             )} */}
+
         </div>
     )
 }

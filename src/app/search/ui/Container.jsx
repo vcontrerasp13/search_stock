@@ -14,7 +14,8 @@ import { GroupedData } from "./GroupedData";
 
 export const Container = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [itemCode, setItemCode] = useState("");
+  const [itemCode, setItemCode] = useState(""); // Valor ingresado por el usuario
+  const [searchCode, setSearchCode] = useState(""); // Código que se usará para la búsqueda
   const [product, setProduct] = useState([]);
   const [message, setMessage] = useState("");
   const [groupedData, setGroupedData] = useState([]);
@@ -29,9 +30,15 @@ export const Container = () => {
     setEstablecimientos();
   }, [setEstablecimientos]);
 
-  const getProduct = async () => {
+  const getProduct = async (searchTerm) => {
     setIsLoading(true);
-    const url = `/api/Articulo/ConsultarStock?ItemCode=${itemCode.toUpperCase()}&WshCode=${user.id_establec_current}`;
+
+    // Limpiar los resultados y mensajes anteriores antes de buscar
+    setProduct([]);
+    setGroupedData([]);
+    setMessage("");
+
+    const url = `/api/Articulo/ConsultarStock?ItemCode=${searchTerm.toUpperCase()}&WshCode=${user.id_establec_current}`;
 
     try {
       const response = await fetch(url);
@@ -41,37 +48,49 @@ export const Container = () => {
         setProduct([]);
       } else {
         const data = await response.json();
+        if (data.length === 0) {
+          setMessage("No se encontraron productos con el código ingresado.");
+        }
         setProduct(data);
       }
     } catch (error) {
       console.log(error);
+      setMessage("Hubo un error en la búsqueda.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const groupProducts = (products) => {
-    return Object.values(
-      products.reduce((acc, item) => {
-        const [codPadre, colorCode] = item.itemCode.split("-");
-        const key = `${codPadre}-${colorCode}`;
-
-        if (acc[key]) {
-          acc[key].cantidad += item.onHand;
-        } else {
-          acc[key] = { codPadre, colorCode, cantidad: item.onHand };
-        }
-        return acc;
-      }, {})
+  const groupProducts = (products, searchTerm) => {
+    const filteredData = products.filter((item) =>
+      item.itemCode.split("-")[0] === searchTerm.toUpperCase()
     );
+    return filteredData;
   };
 
-  const handleSearch = async (code) => {
-    const trimmedCode = code.trim();
+  const totalAgrouped = groupProducts(product, searchCode).reduce(
+    (acc, current) => (acc += current.onHand),
+    0
+  );
+
+  const handleSearch = async () => {
+    const trimmedCode = itemCode.trim();
     if (!validateItemCode(trimmedCode)) return;
 
+    // Limpiar resultados de productos y agrupados antes de iniciar la búsqueda
+    setProduct([]);
+    setGroupedData([]);
+    setMessage("");
+
     setIsCodPadre(!trimmedCode.includes("-"));
-    await getProduct();
+    
+    // Actualizar `searchCode` y hacer la búsqueda después de asegurarse de que se actualizó el estado
+    await new Promise(resolve => {
+      setSearchCode(trimmedCode);
+      resolve();
+    });
+
+    await getProduct(trimmedCode); // Hacer la búsqueda de productos
 
     const articulos = await getArticulo();
     const findArticulo = articulos.data.some((a) => a.id === trimmedCode);
@@ -99,12 +118,12 @@ export const Container = () => {
   };
 
   useEffect(() => {
-    if (!itemCode.includes("-") && product.length > 0) {
-      setGroupedData(groupProducts(product));
+    if (!searchCode.includes("-") && product.length > 0) {
+      setGroupedData(groupProducts(product, searchCode));
     }
-  }, [product, itemCode]);
+  }, [product, searchCode]);
 
-  const totalItems = itemCode.includes("-") ? product.length : groupedData.length;
+  const totalItems = searchCode.includes("-") ? product.length : groupedData.length;
   const indexOfLastProduct = currentPage * itemsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
   const currentProducts = product.slice(indexOfFirstProduct, indexOfLastProduct);
@@ -119,14 +138,23 @@ export const Container = () => {
       <InputSearch setItemCode={setItemCode} itemCode={itemCode} handleSearch={handleSearch} />
 
       <div className="w-full min-h-80">
-        {isLoading
-          ? (<Loader />)
-          : product.length > 0
-            ? (
-              isCodPadre
-                ? (<GroupedData currentGroupedData={currentGroupedData} product={product} />)
-                : (<ResultContainer product={currentProducts} message={message} itemCode={itemCode} />)
-            ) : (<Image src={search_img} width={500} height={500} alt="imag-search" className="h-62 mt-10 m-auto pointer-events-none opacity-30" />)}
+        {isLoading ? (
+          <Loader />
+        ) : product.length > 0 ? (
+          isCodPadre ? (
+            <GroupedData currentGroupedData={currentGroupedData} total={totalAgrouped} />
+          ) : (
+            <ResultContainer product={currentProducts} message={message} itemCode={searchCode} />
+          )
+        ) : (
+          <Image
+            src={search_img}
+            width={500}
+            height={500}
+            alt="imag-search"
+            className="h-62 mt-10 m-auto pointer-events-none opacity-30"
+          />
+        )}
       </div>
 
       {product.length > 0 && totalItems > itemsPerPage && (
