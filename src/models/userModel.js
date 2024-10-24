@@ -53,6 +53,7 @@ import { pool } from '@/lib/db';
 
 
 export const userModel = {
+    create: async () => { },
     update: async (establecimiento, id_user) => {
         try {
             let query = "UPDATE tbl_users SET id_establec_current=$1 WHERE id=$2";
@@ -63,6 +64,21 @@ export const userModel = {
         } catch (error) {
             console.error('Error en userModel:', error.message);
             return { success: false, error: "Error al insertar el artículo" };
+        }
+    },
+    getAll: async () => {
+        try {
+            let query = `SELECT * FROM tbl_users`;
+            const values = []
+            const userResult = await pool.query(query, values);
+
+            return {
+                success: true,
+                message: 'Usuarios obtenido',
+                user: userResult.rows,
+            }
+        } catch (error) {
+            console.log(error)
         }
     },
     getOne: async (id_user) => {
@@ -101,8 +117,8 @@ export const userModel = {
 
             let message = 'Login Exitoso';
             // let queryUser = `SELECT * FROM tbl_users WHERE user_name=$1`;
-            let queryUser = `SELECT u.id as id_user, u.user_name as username,u.password,e.id as id_establec_current, e.nombre as establec_current,e.lat,e.lon,r.id as id_rol,r.nombre as rol FROM tbl_users u
-    
+            let queryUser = `SELECT u.id as id_user, u.user_name as username,u.password,e.id as id_establec_current, e.nombre as establec_current,e.lat,e.lon,r.id as id_rol,r.nombre as rol 
+                            FROM tbl_users u    
                             INNER JOIN tbl_establecimiento e ON u.id_establec_current=e.id
                             INNER JOIN tbl_role r ON u.id_rol=r.id
                             WHERE u.user_name=$1`;

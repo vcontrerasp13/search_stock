@@ -19,6 +19,9 @@ import { userModel } from '@/models/userModel.js';
 
 
 export const userController = {
+    create: async () => {
+
+    },
     update: async (establecimiento, id_user) => {
         try {
             const result = await userModel.update(establecimiento, id_user);
@@ -34,6 +37,15 @@ export const userController = {
             return result;
         } catch (error) {
             return { success: false, message: "Error en la consulta" };
+        }
+    },
+
+    getAll: async () => {
+        try {
+            const result = await userModel.getAll();
+            return result;
+        } catch (error) {
+            return { success: false, message: "Error en la consulta de GETALL" };
         }
     },
     login: async (username, password) => {

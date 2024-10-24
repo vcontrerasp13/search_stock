@@ -6,39 +6,36 @@ import { userStore } from "@/store/userStore";
 import { useSession } from "next-auth/react";
 
 export const NavSearch = ({ session }) => {
-  const { data, status } = useSession()
-
+  const { data, status } = useSession();
+  console.log(session,'👀');
   const { id_user } = session.user.user;
   const [loading, setLoading] = useState(false);
 
-  const setDataUser = userStore(state => state.setDataUser);
-  const user = userStore(state => state.user);
+  const setDataUser = userStore((state) => state.setDataUser);
+  const user = userStore((state) => state.user);
 
   const closeSession = async () => {
     setLoading(true);
-    await handleSignOut()
+    await handleSignOut();
     setLoading(false);
-  }
-
-
+  };
 
   useEffect(() => {
     if (id_user) {
-      setDataUser(id_user)
+      setDataUser(id_user);
     }
-
-  }, [id_user, setDataUser, loading])
+  }, [id_user, setDataUser, loading]);
 
   return (
     <div className="navbar bg-accent text-accent-content sticky top-0 z-50">
       <div className="flex-1">
-
-        {
-          status === 'loading'
-            ? (<div className="skeleton h-5 w-40"></div>)
-            : (<Link href="/" className="btn btn-ghost text-xl">{user?.username}  - {user?.establec_current} </Link>)
-
-        }
+        {status === "loading" ? (
+          <div className="skeleton h-5 w-40"></div>
+        ) : (
+          <Link href="/" className="btn btn-ghost text-xl">
+            {user?.username} - {user?.establec_current}{" "}
+          </Link>
+        )}
       </div>
       <div className="flex-none">
         <div className="dropdown dropdown-end">
@@ -59,19 +56,20 @@ export const NavSearch = ({ session }) => {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a className="justify-between">
-                Perfil
-              </a>
+              <a className="justify-between">Perfil</a>
             </li>
             <li>
-              <Link href='/configuration'>Configuración</Link>
+              <Link href="/configuration">Configuración</Link>
             </li>
             <li>
-              <button onClick={closeSession} disabled={loading}> {loading ? "Cerrando..." : "Cerrar"}</button>
+              <button onClick={closeSession} disabled={loading}>
+                {" "}
+                {loading ? "Cerrando..." : "Cerrar"}
+              </button>
             </li>
           </ul>
         </div>
       </div>
-    </div >
+    </div>
   );
 };

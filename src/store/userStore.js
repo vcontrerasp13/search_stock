@@ -1,7 +1,8 @@
-import { getUserId, updateUserEstablecimiento } from '@/actions/user/userAction';
+import { createUser, getAllUsers, getUserId, updateUserEstablecimiento } from '@/actions/user/userAction';
 import { create } from 'zustand'
 
 export const userStore = create((set) => ({
+    userList: [],
     user: [],
     establec_access: [],
     establec_current: '',
@@ -24,6 +25,24 @@ export const userStore = create((set) => ({
 
         } catch (error) {
             console.log(error);
+        }
+    },
+    showUsers: async () => {
+        try {
+            const response = await getAllUsers();
+            set({ userList: response.data.user })
+
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    createUser: async (data) => {
+        try {
+            const response = await createUser(data)
+
+        } catch (error) {
+
         }
     }
 }))

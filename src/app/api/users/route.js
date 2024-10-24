@@ -7,8 +7,14 @@ export async function GET(req) {
         const { searchParams } = req.nextUrl;
         const id = searchParams.get('id');
 
-        const result = await userController.getOne(id);
+        let result
+        if (id) {
+            result = await userController.getOne(id);
 
+        } else {
+            result = await userController.getAll();
+        }
+        
         if (result.success) {
             return NextResponse.json(result, { status: 200 });
         } else {
